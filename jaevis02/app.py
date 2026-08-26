@@ -127,7 +127,7 @@ class JaevisHandler(BaseHTTPRequestHandler):
         self.wfile.write(encoded)
 
     def _html(self) -> None:
-        content = b"""<!doctype html><html lang="cs"><meta charset="utf-8">
+        content = """<!doctype html><html lang="cs"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JAEVIS02</title><style>
 body{font:16px system-ui;margin:auto;max-width:720px;padding:2rem;background:#101522;color:#e9edf7}
@@ -141,7 +141,7 @@ const chat=document.querySelector('#chat'), form=document.querySelector('form'),
 const add=(role,text)=>{const p=document.createElement('p');p.className=role;p.textContent=`${role==='user'?'Vy':'JAEVIS02'}: ${text}`;chat.append(p);chat.scrollTop=chat.scrollHeight};
 form.onsubmit=async e=>{e.preventDefault();const message=input.value.trim();if(!message)return;add('user',message);input.value='';
 try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message})});const data=await r.json();add('assistant',data.reply||data.error)}catch{add('assistant','Nelze se připojit ke službě.')}}
-</script></html>"""
+</script></html>""".encode()
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(content)))
