@@ -1,0 +1,11 @@
+services:
+  jaevis02:
+    build: .
+    ports:
+      - "${JAEVIS_PORT:-8080}:8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: 8080
+    restart: unless-stopped
