@@ -72,10 +72,20 @@ class Assistant:
         )
         with urlopen(request, timeout=30) as response:
             data = json.load(response)
-        text = data.get("output_text")
-        if not isinstance(text, str) or not text.strip():
+        # The REST response nests generated text inside output messages.
+        text_parts = []
+        for item in data.get("output", []):
+            if item.get("type") != "message":
+                continue
+            for part in item.get("content", []):
+                text = part.get("text")
+                if part.get("type") == "output_text" and isinstance(text, str):
+                    text_parts.append(text)
+
+        answer = "".join(text_parts).strip()
+        if not answer:
             raise ValueError("model returned no text")
-        return text.strip()
+        return answer
 
 
 ASSISTANT = Assistant()
